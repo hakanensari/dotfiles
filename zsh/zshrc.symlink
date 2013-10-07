@@ -31,4 +31,6 @@ do
   source $file
 done
 
+export PATH=./bin:~/bin:$PATH
+
 unset config_files

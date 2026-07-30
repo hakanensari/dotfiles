@@ -1,4 +1,6 @@
-# Automatically load ~/.env.local into direnv if present
-if [ -f "$HOME/.env.local" ]; then
-  source_env "$HOME/.env.local"
+# Automatically load ~/.config/env into direnv if present
+if [ -f "$HOME/.config/env" ]; then
+  source_env "$HOME/.config/env"
 fi
+
+

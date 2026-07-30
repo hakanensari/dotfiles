@@ -1,1 +1,6 @@
-git/gitconfig.symlink
+.DS_Store
+*.swp
+*.tmp
+.env
+.keys/
+.secrets/

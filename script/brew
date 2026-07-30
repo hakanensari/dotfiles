@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#
+# brew - Idempotently install or update Homebrew packages from Brewfile
+
+set -e
+
+DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+echo "Bundling Homebrew packages from $DOTFILES_ROOT/brew/Brewfile..."
+brew bundle --file="$DOTFILES_ROOT/brew/Brewfile"
+echo "Homebrew bundle complete!"

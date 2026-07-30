@@ -1,0 +1,20 @@
+[user]
+	name = Hakan Ensari
+	email = me@hakanensari.com
+
+[core]
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+
+[init]
+	defaultBranch = main
+
+[push]
+	default = simple
+	autoSetupRemote = true
+
+[pull]
+	rebase = true
+
+[color]
+	ui = auto

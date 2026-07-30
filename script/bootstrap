@@ -1,122 +1,109 @@
 #!/usr/bin/env bash
 #
-# bootstrap installs things.
-
-DOTFILES_ROOT="`pwd`"
+# bootstrap - Idempotently symlink dotfiles into $HOME
 
 set -e
 
-info () {
-  printf "[ \033[00;34m..\033[0m ] $1"
-}
+DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-user () {
-  printf "\r[ \033[0;33m?\033[0m ] $1 "
-}
+echo "Bootstrapping dotfiles from $DOTFILES_ROOT..."
 
-success () {
-  printf "\r\033[2K[ \033[00;32mOK\033[0m ] $1\n"
-}
+# Find all *.symlink files and link them into $HOME
+find "$DOTFILES_ROOT" -name "*.symlink" | while read -r src; do
+  file="$(basename "$src" .symlink)"
+  target="$HOME/.$file"
 
-fail () {
-  printf "\r\033[2K[\033[0;31mFAIL\033[0m] $1\n"
-  echo ''
-  exit
-}
-
-setup_gitconfig () {
-  if ! [ -f git/gitconfig.symlink ]
-  then
-    info 'setup gitconfig'
-
-    git_credential='cache'
-    if [ "$(uname -s)" == "Darwin" ]
-    then
-      git_credential='osxkeychain'
-    fi
-
-    user ' - What is your github author name?'
-    read -e git_authorname
-    user ' - What is your github author email?'
-    read -e git_authoremail
-
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.symlink.example > git/gitconfig.symlink
-
-    success 'gitconfig'
+  if [ -h "$target" ]; then
+    echo "  [skip] Symlink already exists: $target"
+  elif [ -f "$target" ] || [ -d "$target" ]; then
+    echo "  [backup] Backing up existing $target -> $target.backup"
+    mv "$target" "$target.backup"
+    ln -s "$src" "$target"
+    echo "  [link] Linked $src -> $target"
+  else
+    ln -s "$src" "$target"
+    echo "  [link] Linked $src -> $target"
   fi
-}
+done
 
-link_files () {
-  ln -s $1 $2
-  success "linked $1 to $2"
-}
+# Symlink ~/.config/mise/config.toml
+mkdir -p "$HOME/.config/mise"
+if [ ! -h "$HOME/.config/mise/config.toml" ]; then
+  if [ -f "$HOME/.config/mise/config.toml" ]; then
+    mv "$HOME/.config/mise/config.toml" "$HOME/.config/mise/config.toml.backup"
+  fi
+  ln -s "$DOTFILES_ROOT/mise/config.toml" "$HOME/.config/mise/config.toml"
+  echo "  [link] Linked mise/config.toml -> ~/.config/mise/config.toml"
+fi
 
-install_dotfiles () {
-  info 'installing dotfiles'
-
-  overwrite_all=false
-  backup_all=false
-  skip_all=false
-
-  for source in `find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink`
-  do
-    dest="$HOME/.`basename \"${source%.*}\"`"
-
-    if [ -f $dest ] || [ -d $dest ]
-    then
-
-      overwrite=false
-      backup=false
-      skip=false
-
-      if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
-      then
-        user "File already exists: `basename $source`, what do you want to do? [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
-        read -n 1 action
-
-        case "$action" in
-          o )
-            overwrite=true;;
-          O )
-            overwrite_all=true;;
-          b )
-            backup=true;;
-          B )
-            backup_all=true;;
-          s )
-            skip=true;;
-          S )
-            skip_all=true;;
-          * )
-            ;;
-        esac
+# Symlink ~/.config/direnv/ settings and direnvrc
+mkdir -p "$HOME/.config/direnv"
+if [ -d "$DOTFILES_ROOT/direnv" ]; then
+  for f in "$DOTFILES_ROOT/direnv"/*; do
+    name="$(basename "$f")"
+    target="$HOME/.config/direnv/$name"
+    if [ ! -h "$target" ]; then
+      if [ -f "$target" ]; then
+        mv "$target" "$target.backup"
       fi
-
-      if [ "$overwrite" == "true" ] || [ "$overwrite_all" == "true" ]
-      then
-        rm -rf $dest
-        success "removed $dest"
-      fi
-
-      if [ "$backup" == "true" ] || [ "$backup_all" == "true" ]
-      then
-        mv $dest $dest\.backup
-        success "moved $dest to $dest.backup"
-      fi
-
-      if [ "$skip" == "false" ] && [ "$skip_all" == "false" ]
-      then
-        link_files $source $dest
-      else
-        success "skipped $source"
-      fi
-
-    else
-      link_files $source $dest
+      ln -s "$f" "$target"
+      echo "  [link] Linked direnv/$name -> ~/.config/direnv/$name"
     fi
-
   done
-}
+fi
 
-setup_gitconfig
-install_dotfiles
+# Symlink ~/.config/zed/ settings and keymap
+mkdir -p "$HOME/.config/zed"
+if [ -d "$DOTFILES_ROOT/zed" ]; then
+  for f in "$DOTFILES_ROOT/zed"/*; do
+    name="$(basename "$f")"
+    target="$HOME/.config/zed/$name"
+    if [ ! -h "$target" ]; then
+      if [ -f "$target" ]; then
+        mv "$target" "$target.backup"
+      fi
+      ln -s "$f" "$target"
+      echo "  [link] Linked zed/$name -> ~/.config/zed/$name"
+    fi
+  done
+fi
+
+# Symlink ~/.agents/skills for global agent access across all projects
+if [ -d "$DOTFILES_ROOT/agents/skills" ]; then
+  mkdir -p "$HOME/.agents/skills"
+  for s in "$DOTFILES_ROOT/agents/skills"/*; do
+    name="$(basename "$s")"
+    target="$HOME/.agents/skills/$name"
+    if [ ! -h "$target" ]; then
+      if [ -d "$target" ] || [ -f "$target" ]; then
+        mv "$target" "$target.backup"
+      fi
+      ln -s "$s" "$target"
+      echo "  [link] Linked agents/skills/$name -> ~/.agents/skills/$name"
+    fi
+  done
+fi
+
+# Symlink scripts from dotfiles/bin into ~/.local/bin
+mkdir -p "$HOME/.local/bin"
+if [ -d "$DOTFILES_ROOT/bin" ]; then
+  find "$DOTFILES_ROOT/bin" -type f | while read -r script; do
+    name="$(basename "$script")"
+    target="$HOME/.local/bin/$name"
+    if [ ! -h "$target" ]; then
+      if [ -f "$target" ]; then
+        mv "$target" "$target.backup"
+      fi
+      ln -s "$script" "$target"
+      echo "  [link] Linked bin/$name -> ~/.local/bin/$name"
+    fi
+  done
+fi
+
+# Install declared runtimes via mise
+if command -v mise >/dev/null 2>&1; then
+  echo "Installing declared runtimes via mise..."
+  mise install
+fi
+
+echo "Bootstrap complete!"

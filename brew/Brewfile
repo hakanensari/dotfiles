@@ -1,0 +1,28 @@
+# Core Developer Tools & Utilities
+brew "gh"
+brew "git"
+brew "htop"
+brew "imagemagick"
+brew "oh-my-posh"
+brew "poppler"
+brew "rclone"
+brew "zoxide"
+
+# Runtime Managers
+brew "mise"
+brew "uv"
+
+# Editors & Multiplexers
+brew "herdr"
+brew "neovim"
+
+# Services
+brew "postgresql@18", restart_service: :changed
+brew "redis", restart_service: :changed
+
+# AI Toolchain
+brew "rtk"
+
+# Casks
+cask "codex"
+cask "font-jetbrains-mono-nerd-font"

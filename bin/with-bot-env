@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+# with-bot-env: Wraps agent commands with central bot Git credentials while preserving local project .env
+
+if [[ -f .env ]]; then
+  set -a
+  source .env
+  set +a
+fi
+
+if [[ -f "$HOME/.config/bot.env" ]]; then
+  set -a
+  source "$HOME/.config/bot.env"
+  set +a
+fi
+
+exec "$@"

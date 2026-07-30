@@ -1,0 +1,4 @@
+# Automatically load ~/.env.local into direnv if present
+if [ -f "$HOME/.env.local" ]; then
+  source_env "$HOME/.env.local"
+fi

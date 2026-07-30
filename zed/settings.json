@@ -1,0 +1,46 @@
+{
+  "diff_view_style": "unified",
+  "languages": {
+    "Ruby": {
+      "language_servers": ["ruby-lsp"],
+      "preferred_line_length": 120,
+      "tab_size": 2
+    },
+    "HTML+ERB": {
+      "language_servers": ["herb", "ruby-lsp", "..."]
+    },
+    "JS+ERB": {
+      "language_servers": ["ruby-lsp", "..."]
+    },
+    "YAML+ERB": {
+      "language_servers": ["ruby-lsp", "..."]
+    }
+  },
+  "lsp": {
+    "rubocop": {
+      "initialization_options": {
+        "safeAutocorrect": false
+      }
+    },
+    "ruby-lsp": {
+      "settings": { "use_bundler": false }
+    },
+    "tailwindcss-language-server": {
+      "settings": {
+        "experimental": {
+          "classRegex": ["\\bclass:\\s*['\"]([^'\"]*)['\"]"]
+        }
+      }
+    }
+  },
+  "cli_default_open_behavior": "existing_window",
+  "preferred_line_length": 80,
+  "soft_wrap": "bounded",
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  }
+}

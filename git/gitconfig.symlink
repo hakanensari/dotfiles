@@ -1,7 +1,6 @@
 [user]
 	name = Hakan Ensari
 	email = hakanensari@gmail.com
-	signingkey = ~/.ssh/id_ed25519_github.pub
 
 [gpg]
 	format = ssh
@@ -31,3 +30,7 @@
 
 [color]
 	ui = auto
+
+# Machine-specific settings (user.signingkey). Untracked; ignored if absent.
+[include]
+	path = ~/.gitconfig.local

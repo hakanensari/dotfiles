@@ -68,6 +68,16 @@ if [ -d "$DOTFILES_ROOT/zed" ]; then
   done
 fi
 
+# Symlink ~/.ssh/allowed_signers (public keys only; git needs it to verify signatures)
+mkdir -p "$HOME/.ssh"
+if [ -f "$DOTFILES_ROOT/ssh/allowed_signers" ] && [ ! -h "$HOME/.ssh/allowed_signers" ]; then
+  if [ -f "$HOME/.ssh/allowed_signers" ]; then
+    mv "$HOME/.ssh/allowed_signers" "$HOME/.ssh/allowed_signers.backup"
+  fi
+  ln -s "$DOTFILES_ROOT/ssh/allowed_signers" "$HOME/.ssh/allowed_signers"
+  echo "  [link] Linked ssh/allowed_signers -> ~/.ssh/allowed_signers"
+fi
+
 # Symlink ~/.agents/skills for global agent access across all projects
 if [ -d "$DOTFILES_ROOT/agents/skills" ]; then
   mkdir -p "$HOME/.agents/skills"

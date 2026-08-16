@@ -1,6 +1,6 @@
 [user]
 	name = Hakan Ensari
-	email = me@hakanensari.com
+	email = hakanensari@gmail.com
 	signingkey = ~/.ssh/id_ed25519_github.pub
 
 [gpg]

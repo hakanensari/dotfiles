@@ -1,6 +1,7 @@
 export PATH="$HOME/.local/bin:$PATH"
 export EDITOR="zed-editor"
 export CLAUDE_CONFIG_DIR="$HOME/.claude"
+export OLLAMA_KEEP_ALIVE="30m"
 
 HISTSIZE=10000
 SAVEHIST=10000

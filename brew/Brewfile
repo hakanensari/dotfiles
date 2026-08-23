@@ -9,7 +9,6 @@ brew "rclone"
 brew "zoxide"
 
 # Runtime Managers
-brew "mise"
 brew "uv"
 
 # Editors & Multiplexers

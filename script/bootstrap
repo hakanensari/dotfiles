@@ -5,6 +5,7 @@
 set -e
 
 DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+export PATH="$HOME/.local/bin:$PATH"
 
 echo "Bootstrapping dotfiles from $DOTFILES_ROOT..."
 
@@ -152,7 +153,12 @@ if [ -d "$DOTFILES_ROOT/bin" ]; then
   done
 fi
 
-# Install declared runtimes via mise
+# Install mise and declared runtimes
+if ! command -v mise >/dev/null 2>&1; then
+  echo "Installing standalone mise..."
+  curl -fsSL https://mise.run | sh
+fi
+
 if command -v mise >/dev/null 2>&1; then
   echo "Installing declared runtimes via mise..."
   mise install

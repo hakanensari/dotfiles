@@ -111,6 +111,40 @@ if [ -d "$DOTFILES_ROOT/agents/skills" ]; then
   done
 fi
 
+# Symlink ~/.config/AGENTS.md
+mkdir -p "$HOME/.config"
+if [ -f "$DOTFILES_ROOT/agents/AGENTS.md" ]; then
+  target="$HOME/.config/AGENTS.md"
+  if [ ! -h "$target" ]; then
+    if [ -f "$target" ]; then
+      mv "$target" "$target.backup"
+    fi
+    ln -s "$DOTFILES_ROOT/agents/AGENTS.md" "$target"
+    echo "  [link] Linked agents/AGENTS.md -> ~/.config/AGENTS.md"
+  fi
+fi
+
+# Symlink agent instructions into tool directories
+mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.gemini"
+
+if [ ! -h "$HOME/.claude/CLAUDE.md" ]; then
+  [ -f "$HOME/.claude/CLAUDE.md" ] && mv "$HOME/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md.backup"
+  ln -s "$HOME/.config/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+  echo "  [link] Linked ~/.config/AGENTS.md -> ~/.claude/CLAUDE.md"
+fi
+
+if [ ! -h "$HOME/.codex/AGENTS.md" ]; then
+  [ -f "$HOME/.codex/AGENTS.md" ] && mv "$HOME/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md.backup"
+  ln -s "$HOME/.config/AGENTS.md" "$HOME/.codex/AGENTS.md"
+  echo "  [link] Linked ~/.config/AGENTS.md -> ~/.codex/AGENTS.md"
+fi
+
+if [ ! -h "$HOME/.gemini/GEMINI.md" ]; then
+  [ -f "$HOME/.gemini/GEMINI.md" ] && mv "$HOME/.gemini/GEMINI.md" "$HOME/.gemini/GEMINI.md.backup"
+  ln -s "$HOME/.config/AGENTS.md" "$HOME/.gemini/GEMINI.md"
+  echo "  [link] Linked ~/.config/AGENTS.md -> ~/.gemini/GEMINI.md"
+fi
+
 # Symlink ~/.gemini/antigravity-cli/ settings and keybindings
 mkdir -p "$HOME/.gemini/antigravity-cli"
 if [ -d "$DOTFILES_ROOT/agy" ]; then
@@ -162,6 +196,12 @@ fi
 if command -v mise >/dev/null 2>&1; then
   echo "Installing declared runtimes via mise..."
   mise install
+fi
+
+# Initialize RTK hooks and instructions
+if command -v rtk >/dev/null 2>&1; then
+  echo "Initializing RTK..."
+  rtk init -g --auto-patch >/dev/null 2>&1 || true
 fi
 
 echo "Bootstrap complete!"

@@ -34,3 +34,5 @@
 # Machine-specific settings (user.signingkey). Untracked; ignored if absent.
 [include]
 	path = ~/.gitconfig.local
+[credential "https://git.heroku.com"]
+	helper = !heroku git:credentials

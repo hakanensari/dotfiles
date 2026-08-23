@@ -1,0 +1,58 @@
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+
+[projects."/Users/hakanensari/code/pulsify"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code/OpenWhisperer"]
+trust_level = "trusted"
+
+[projects."/private/tmp/claude-501/-Users-hakanensari-code-OpenWhisperer/33d114f5-abb8-4849-a2fd-403fdaab6b3c/scratchpad"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code/frankfurter"]
+trust_level = "trusted"
+
+[projects."/workspace"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code/frida"]
+trust_level = "trusted"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+"gpt-5.6-sol" = 4
+
+[mcp_servers.OpenWhisperer]
+url = "http://localhost:8000/mcp"
+
+[mcp_servers.OpenWhisperer.tools.speak]
+approval_mode = "approve"
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
+
+[[hooks.UserPromptSubmit]]
+
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "/Applications/OpenWhisperer.app/Contents/Resources/hooks/voice-context.sh"
+timeout = 30
+
+[hooks.state]
+
+[hooks.state."/Users/hakanensari/.codex/config.toml:user_prompt_submit:0:0"]
+trusted_hash = "sha256:7f2f95a2d4182487209efc8ab7a6c5b0b61351c77df3048000f79ef42e4cb497"
+
+[hooks.state."/home/hakanensari.guest/.codex/config.toml:user_prompt_submit:0:0"]
+trusted_hash = "sha256:7f2f95a2d4182487209efc8ab7a6c5b0b61351c77df3048000f79ef42e4cb497"
+
+[hooks.state."/Users/hakanensari/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:e509c427e60f46e16faf1e4ca8900c5f18a71c073147ddfd55da39135f998e92"
+enabled = true
+
+[plugins."superpowers@openai-curated"]
+enabled = true
+
+[features]
+hooks = true

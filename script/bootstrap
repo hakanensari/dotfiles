@@ -68,6 +68,22 @@ if [ -d "$DOTFILES_ROOT/zed" ]; then
   done
 fi
 
+# Symlink ~/.config/herdr/ settings
+mkdir -p "$HOME/.config/herdr"
+if [ -d "$DOTFILES_ROOT/herdr" ]; then
+  for f in "$DOTFILES_ROOT/herdr"/*; do
+    name="$(basename "$f")"
+    target="$HOME/.config/herdr/$name"
+    if [ ! -h "$target" ]; then
+      if [ -f "$target" ]; then
+        mv "$target" "$target.backup"
+      fi
+      ln -s "$f" "$target"
+      echo "  [link] Linked herdr/$name -> ~/.config/herdr/$name"
+    fi
+  done
+fi
+
 # Symlink ~/.ssh/allowed_signers (public keys only; git needs it to verify signatures)
 mkdir -p "$HOME/.ssh"
 if [ -f "$DOTFILES_ROOT/ssh/allowed_signers" ] && [ ! -h "$HOME/.ssh/allowed_signers" ]; then
@@ -92,6 +108,32 @@ if [ -d "$DOTFILES_ROOT/agents/skills" ]; then
       echo "  [link] Linked agents/skills/$name -> ~/.agents/skills/$name"
     fi
   done
+fi
+
+# Symlink ~/.gemini/antigravity-cli/ settings and keybindings
+mkdir -p "$HOME/.gemini/antigravity-cli"
+if [ -d "$DOTFILES_ROOT/agy" ]; then
+  for f in "$DOTFILES_ROOT/agy"/*; do
+    name="$(basename "$f")"
+    target="$HOME/.gemini/antigravity-cli/$name"
+    if [ ! -h "$target" ]; then
+      if [ -f "$target" ]; then
+        mv "$target" "$target.backup"
+      fi
+      ln -s "$f" "$target"
+      echo "  [link] Linked agy/$name -> ~/.gemini/antigravity-cli/$name"
+    fi
+  done
+fi
+
+# Symlink ~/.codex/config.toml
+mkdir -p "$HOME/.codex"
+if [ -f "$DOTFILES_ROOT/codex/config.toml" ] && [ ! -h "$HOME/.codex/config.toml" ]; then
+  if [ -f "$HOME/.codex/config.toml" ]; then
+    mv "$HOME/.codex/config.toml" "$HOME/.codex/config.toml.backup"
+  fi
+  ln -s "$DOTFILES_ROOT/codex/config.toml" "$HOME/.codex/config.toml"
+  echo "  [link] Linked codex/config.toml -> ~/.codex/config.toml"
 fi
 
 # Symlink scripts from dotfiles/bin into ~/.local/bin

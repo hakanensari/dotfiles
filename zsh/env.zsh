@@ -1,6 +1,7 @@
 export PATH="$HOME/.local/bin:$PATH"
 export EDITOR="zed-editor"
 export CLAUDE_CONFIG_DIR="$HOME/.claude"
+export CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY=1
 if [[ -f "$HOME/.cache/huggingface/token" ]]; then
   export HF_TOKEN="$(cat "$HOME/.cache/huggingface/token")"
 fi

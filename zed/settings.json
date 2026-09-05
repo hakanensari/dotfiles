@@ -1,4 +1,9 @@
 {
+  "icon_theme": {
+    "mode": "system",
+    "light": "Catppuccin Latte",
+    "dark": "Catppuccin Frappé"
+  },
   "diff_view_style": "unified",
   "languages": {
     "Ruby": {
@@ -40,7 +45,7 @@
   "buffer_font_size": 15,
   "theme": {
     "mode": "system",
-    "light": "One Light",
-    "dark": "One Dark"
+    "light": "Catppuccin Latte",
+    "dark": "Catppuccin Frappé"
   }
 }

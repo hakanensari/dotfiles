@@ -162,20 +162,17 @@ if [ ! -h "$HOME/.gemini/config/skills" ]; then
   fi
 fi
 
-# Symlink ~/.gemini/antigravity-cli/ settings and keybindings
+# Link ~/.gemini/antigravity-cli/ keybindings and seed settings if missing
 mkdir -p "$HOME/.gemini/antigravity-cli"
-if [ -d "$DOTFILES_ROOT/agy" ]; then
-  for f in "$DOTFILES_ROOT/agy"/*; do
-    name="$(basename "$f")"
-    target="$HOME/.gemini/antigravity-cli/$name"
-    if [ ! -h "$target" ]; then
-      if [ -f "$target" ]; then
-        mv "$target" "$target.backup"
-      fi
-      ln -s "$f" "$target"
-      echo "  [link] Linked agy/$name -> ~/.gemini/antigravity-cli/$name"
-    fi
-  done
+if [ -f "$DOTFILES_ROOT/agy/keybindings.json" ] && [ ! -h "$HOME/.gemini/antigravity-cli/keybindings.json" ]; then
+  [ -f "$HOME/.gemini/antigravity-cli/keybindings.json" ] && mv "$HOME/.gemini/antigravity-cli/keybindings.json" "$HOME/.gemini/antigravity-cli/keybindings.json.backup"
+  ln -s "$DOTFILES_ROOT/agy/keybindings.json" "$HOME/.gemini/antigravity-cli/keybindings.json"
+  echo "  [link] Linked agy/keybindings.json -> ~/.gemini/antigravity-cli/keybindings.json"
+fi
+
+if [ -f "$DOTFILES_ROOT/agy/settings.json" ] && [ ! -f "$HOME/.gemini/antigravity-cli/settings.json" ]; then
+  cp "$DOTFILES_ROOT/agy/settings.json" "$HOME/.gemini/antigravity-cli/settings.json"
+  echo "  [seed] Seeded agy/settings.json -> ~/.gemini/antigravity-cli/settings.json"
 fi
 
 # Symlink ~/.codex/config.toml

@@ -7,27 +7,7 @@
   "runningLightSpeed": "fast",
   "showFeedbackSurvey": false,
   "showTips": false,
-  "statusLine": {
-    "type": "command",
-    "command": "/Users/hakanensari/.gemini/antigravity-cli/statusline.sh"
-  },
   "toolPermission": "always-proceed",
-  "trustedWorkspaces": [
-    "/Users/hakanensari/code/frida",
-    "/Users/hakanensari/code/dotfiles",
-    "/Users/hakanensari/code/pulsify",
-    "/Users/hakanensari/code/OpenWhisperer",
-    "/Users/hakanensari/code/authe_standard",
-    "/Users/hakanensari/code/amazon-ads-ruby",
-    "/Users/hakanensari/code/frankfurter",
-    "/Users/hakanensari/code/frankfurter-site",
-    "/Users/hakanensari/code/pulsify/.claude/worktrees/1350-link-ad-model-to-catalogitem",
-    "/Users/hakanensari/code/pulsify/.claude/worktrees/1353-drop-redundant-catalog-columns-from-listings",
-    "/Users/hakanensari/code/pulsify/.claude/worktrees/catalog-model-cleanups",
-    "/Users/hakanensari/code/pulsify/.claude/worktrees/1385-expose-the-mutations-ledger-to-query-data-and-the-",
-    "/Users/hakanensari/code/pulsify/.claude/worktrees/1395-replace-automation-setters-with-context-mutations-",
-    "/Users/hakanensari/code/pulsify/.claude/worktrees/1369-add-retention-window-for-webhook-calls"
-  ],
   "verbosity": "low",
   "vimInsertFirst": true
 }

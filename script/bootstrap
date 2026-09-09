@@ -133,6 +133,14 @@ if [ ! -h "$HOME/.claude/CLAUDE.md" ]; then
   echo "  [link] Linked ~/.config/AGENTS.md -> ~/.claude/CLAUDE.md"
 fi
 
+if [ ! -h "$HOME/.claude/skills" ]; then
+  [ -d "$HOME/.claude/skills" ] && rmdir "$HOME/.claude/skills" 2>/dev/null || true
+  if [ ! -e "$HOME/.claude/skills" ]; then
+    ln -s "$HOME/.agents/skills" "$HOME/.claude/skills"
+    echo "  [link] Linked ~/.agents/skills -> ~/.claude/skills"
+  fi
+fi
+
 if [ ! -h "$HOME/.codex/AGENTS.md" ]; then
   [ -f "$HOME/.codex/AGENTS.md" ] && mv "$HOME/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md.backup"
   ln -s "$HOME/.config/AGENTS.md" "$HOME/.codex/AGENTS.md"

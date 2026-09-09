@@ -153,6 +153,15 @@ if [ ! -h "$HOME/.gemini/GEMINI.md" ]; then
   echo "  [link] Linked ~/.config/AGENTS.md -> ~/.gemini/GEMINI.md"
 fi
 
+mkdir -p "$HOME/.gemini/config"
+if [ ! -h "$HOME/.gemini/config/skills" ]; then
+  [ -d "$HOME/.gemini/config/skills" ] && rmdir "$HOME/.gemini/config/skills" 2>/dev/null || true
+  if [ ! -e "$HOME/.gemini/config/skills" ]; then
+    ln -s "$HOME/.agents/skills" "$HOME/.gemini/config/skills"
+    echo "  [link] Linked ~/.agents/skills -> ~/.gemini/config/skills"
+  fi
+fi
+
 # Symlink ~/.gemini/antigravity-cli/ settings and keybindings
 mkdir -p "$HOME/.gemini/antigravity-cli"
 if [ -d "$DOTFILES_ROOT/agy" ]; then

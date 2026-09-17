@@ -28,9 +28,3 @@ if command -v direnv >/dev/null 2>&1; then
   eval "$(direnv hook zsh)"
 fi
 
-if command -v with-bot-env >/dev/null 2>&1; then
-  agy() { with-bot-env command agy "$@"; }
-  claude() { with-bot-env command claude "$@"; }
-  codex() { with-bot-env command codex "$@"; }
-  pi() { with-bot-env command pi "$@"; }
-fi

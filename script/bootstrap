@@ -95,7 +95,10 @@ if [ -f "$DOTFILES_ROOT/ssh/allowed_signers" ] && [ ! -h "$HOME/.ssh/allowed_sig
   echo "  [link] Linked ssh/allowed_signers -> ~/.ssh/allowed_signers"
 fi
 
-# Install global agent skills via npx skills
+# Install global agent skills via npx skills.
+# Note: npx skills tracks global packages in ~/.agents/.skill-lock.json, but
+# `npx skills experimental_install` only restores project-level skills-lock.json (no -g support yet).
+# Explicit `npx skills add ... -g -y` calls ensure reliable bootstrap across fresh machines.
 if command -v npx >/dev/null 2>&1; then
   echo "  [skills] Installing global agent skills via npx skills..."
   npx skills add mattpocock/skills --skill grill-me handoff wait-what -g -y 2>/dev/null || true

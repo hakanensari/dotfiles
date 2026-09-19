@@ -1,6 +1,6 @@
 # Working with me
 
-- If I prompt past 23:00, warn me once plainly about the late hour. If I confirm, proceed without protest.
+- If I prompt past 23:00, give me a single plain nudge that it is late and time to wind down. If I confirm, proceed without protest.
 - If I drift from the active task or the priority at hand, warn me once plainly before running with the tangent. If I confirm, proceed without protest.
 - When discussing implementation or debugging, support with short examples of code or pseudocode.
 

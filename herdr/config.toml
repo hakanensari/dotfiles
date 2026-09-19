@@ -19,9 +19,3 @@ delay_seconds = 1
 # Play sounds when agents change state in background workspaces
 [ui.sound]
 enabled = true
-
-[keys]
-new_workspace = ["prefix+shift+n", "cmd+n"]
-new_tab = ["prefix+c", "cmd+t"]
-close_tab = ["prefix+shift+x", "cmd+w"]
-switch_tab = ["prefix+1..9", "cmd+1..9"]

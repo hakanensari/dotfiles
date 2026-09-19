@@ -1,4 +1,31 @@
 {
+  "agent_servers": {
+    "antigravity-acp": {
+      "favorite_config_option_values": {
+        "model": [
+          "gemini-3.8-flash-high"
+        ]
+      },
+      "default_config_options": {
+        "mode": "yolo",
+        "model": "gemini-3.8-flash-high"
+      },
+      "type": "registry"
+    }
+  },
+  "project_panel": {
+    "hide_hidden": false,
+    "indent_guides": {
+      "show": "always"
+    },
+    "git_status_indicator": false,
+    "diagnostic_badges": false,
+    "bold_folder_labels": false,
+    "folder_indicator": "both",
+    "file_icons": false,
+    "entry_spacing": "comfortable",
+    "hide_gitignore": true
+  },
   "icon_theme": {
     "mode": "system",
     "light": "Catppuccin Latte",
@@ -47,5 +74,12 @@
     "mode": "system",
     "light": "Catppuccin Latte",
     "dark": "Catppuccin Frappé"
+  },
+  "language_models": {
+    "llama.cpp": {
+      "api_url": "http://localhost:11434",
+      "auto_discover": false,
+      "available_models": []
+    }
   }
 }

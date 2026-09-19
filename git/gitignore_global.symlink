@@ -5,11 +5,13 @@
 .claude/**/*.local*
 .claude/scheduled_tasks.lock
 .claude/worktrees
+.codex/**/*.local*
 .env
 .envrc
 .playwright-mcp
 .ruby-lsp
 .superpowers
+docs/superpowers/
 .worktreeinclude
 .worktrees
 .zed

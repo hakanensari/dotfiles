@@ -95,20 +95,11 @@ if [ -f "$DOTFILES_ROOT/ssh/allowed_signers" ] && [ ! -h "$HOME/.ssh/allowed_sig
   echo "  [link] Linked ssh/allowed_signers -> ~/.ssh/allowed_signers"
 fi
 
-# Symlink ~/.agents/skills for global agent access across all projects
-if [ -d "$DOTFILES_ROOT/agents/skills" ]; then
-  mkdir -p "$HOME/.agents/skills"
-  for s in "$DOTFILES_ROOT/agents/skills"/*; do
-    name="$(basename "$s")"
-    target="$HOME/.agents/skills/$name"
-    if [ ! -h "$target" ]; then
-      if [ -d "$target" ] || [ -f "$target" ]; then
-        mv "$target" "$target.backup"
-      fi
-      ln -s "$s" "$target"
-      echo "  [link] Linked agents/skills/$name -> ~/.agents/skills/$name"
-    fi
-  done
+# Install global agent skills via npx skills
+if command -v npx >/dev/null 2>&1; then
+  echo "  [skills] Installing global agent skills via npx skills..."
+  npx skills add mattpocock/skills --skill grill-me handoff wait-what -g -y 2>/dev/null || true
+  npx skills add jakubkrehel/skills --skill better-colors better-typography better-ui -g -y 2>/dev/null || true
 fi
 
 # Symlink ~/.config/AGENTS.md

@@ -104,6 +104,7 @@ if command -v npx >/dev/null 2>&1; then
   npx skills add mattpocock/skills --skill grill-me handoff wait-what -g -y 2>/dev/null || true
   npx skills add jakubkrehel/skills --skill better-colors better-typography better-ui -g -y 2>/dev/null || true
   npx skills add ogulcancelik/agent-skills --skill web-search -g -y 2>/dev/null || true
+  npx skills add obra/superpowers --skill '*' -g -y 2>/dev/null || true
 fi
 
 # Symlink ~/.config/AGENTS.md

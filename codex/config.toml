@@ -2,6 +2,9 @@ model = "gpt-6-astra"
 model_reasoning_effort = "high"
 approvals_reviewer = "user"
 
+[tui]
+theme = "catppuccin-latte"
+
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
@@ -24,6 +27,26 @@ type = "command"
 command = "/Applications/OpenWhisperer.app/Contents/Resources/hooks/voice-context.sh"
 timeout = 30
 
+[hooks.state]
+
+[hooks.state."/Users/hakanensari/.codex/hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:fcec2a18f441c5694bc9469cf13d7014e823c57ab420e02d63a8bf7ebdfcc72b"
+
+[hooks.state."/Users/hakanensari/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:32c80cd33fbfcfc4ae4f2feca77149fe3334b1113c6598676f753fd942500de2"
+
+[hooks.state."/Users/hakanensari/.codex/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:7f2f95a2d4182487209efc8ab7a6c5b0b61351c77df3048000f79ef42e4cb497"
+
+[hooks.state."/Users/hakanensari/.codex/hooks.json:user_prompt_submit:1:0"]
+trusted_hash = "sha256:78297874884298bf02ef5d48433f2bb34166de580ee027e9e85d564cdf23fe63"
+
+[hooks.state."/Users/hakanensari/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:a0550731637177c048527d803117304a1b3d0f9e4f2580a9fba31d53bfe4cb8f"
+
+[hooks.state."/Users/hakanensari/.codex/config.toml:user_prompt_submit:0:0"]
+trusted_hash = "sha256:7f2f95a2d4182487209efc8ab7a6c5b0b61351c77df3048000f79ef42e4cb497"
+
 
 
 [plugins."superpowers@openai-curated"]
@@ -31,3 +54,6 @@ enabled = true
 
 [features]
 hooks = true
+
+[projects."/Users/hakanensari/code/canape"]
+trust_level = "trusted"

@@ -181,6 +181,22 @@ if [ -f "$DOTFILES_ROOT/codex/config.toml" ] && [ ! -h "$HOME/.codex/config.toml
   echo "  [link] Linked codex/config.toml -> ~/.codex/config.toml"
 fi
 
+# Symlink ~/.pi/agent/extensions
+mkdir -p "$HOME/.pi/agent/extensions"
+if [ -d "$DOTFILES_ROOT/pi/extensions" ]; then
+  for f in "$DOTFILES_ROOT/pi/extensions"/*; do
+    name="$(basename "$f")"
+    target="$HOME/.pi/agent/extensions/$name"
+    if [ ! -h "$target" ]; then
+      if [ -f "$target" ]; then
+        mv "$target" "$target.backup"
+      fi
+      ln -s "$f" "$target"
+      echo "  [link] Linked pi/extensions/$name -> ~/.pi/agent/extensions/$name"
+    fi
+  done
+fi
+
 # Symlink scripts from dotfiles/bin into ~/.local/bin
 mkdir -p "$HOME/.local/bin"
 if [ -d "$DOTFILES_ROOT/bin" ]; then

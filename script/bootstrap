@@ -172,6 +172,12 @@ if [ -f "$DOTFILES_ROOT/agy/keybindings.json" ] && [ ! -h "$HOME/.gemini/antigra
   echo "  [link] Linked agy/keybindings.json -> ~/.gemini/antigravity-cli/keybindings.json"
 fi
 
+if [ -f "$DOTFILES_ROOT/agy/statusline.sh" ] && [ ! -h "$HOME/.gemini/antigravity-cli/statusline.sh" ]; then
+  [ -f "$HOME/.gemini/antigravity-cli/statusline.sh" ] && mv "$HOME/.gemini/antigravity-cli/statusline.sh" "$HOME/.gemini/antigravity-cli/statusline.sh.backup"
+  ln -s "$DOTFILES_ROOT/agy/statusline.sh" "$HOME/.gemini/antigravity-cli/statusline.sh"
+  echo "  [link] Linked agy/statusline.sh -> ~/.gemini/antigravity-cli/statusline.sh"
+fi
+
 if [ -f "$DOTFILES_ROOT/agy/settings.json" ] && [ ! -f "$HOME/.gemini/antigravity-cli/settings.json" ]; then
   cp "$DOTFILES_ROOT/agy/settings.json" "$HOME/.gemini/antigravity-cli/settings.json"
   echo "  [seed] Seeded agy/settings.json -> ~/.gemini/antigravity-cli/settings.json"

@@ -1,184 +1,124 @@
 /**
  * Statusline Extension for Pi.
  *
- * Replicates the Starship-style status line used across Claude Code and Antigravity:
- * 1. Working directory (cyan), with git worktree parent resolution
- * 2. Git status: branch name (purple) + dirty tree indicator (red *)
- * 3. Context window progress bar (7-char rule, cyan/dimmed, hidden below 10%)
- * 4. Model tier and thinking/effort indicator
+ * Runs the project-specific or global statusline script matching Claude Code and AGY:
+ * - In personal-agent: shows email inbox, tasks, next calendar event | [model] | [context bar]
+ * - In other repos: shows project/dir on branch* | [model] | [context bar]
  */
 
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { type Component, truncateToWidth, type TUI, type Theme } from "@earendil-works/pi-tui";
 import { execFile } from "node:child_process";
-import { basename, dirname } from "node:path";
-import { promisify } from "node:util";
+import { existsSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
 
-const execFileAsync = promisify(execFile);
+function resolveScriptPath(cwd: string): string {
+  const candidates = [
+    join(cwd, ".claude", "statusline-command.sh"),
+    join(cwd, ".claude", "bin", "statusline.sh"),
+    join(cwd, ".agents", "statusline-command.sh"),
+  ];
 
-// Colors matching Claude Code & AGY statusline.sh
-const cyan = "\x1b[1;36m";
-const purple = "\x1b[1;35m";
-const red = "\x1b[0;31m";
-const reset = "\x1b[0m";
-const dim = "\x1b[90m";
-const branchGlyph = "\uE0A0"; // U+E0A0 Nerd Font branch glyph
-const barFill = "━"; // U+2501 heavy horizontal
-const barEmpty = "─"; // U+2500 light horizontal
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) {
+      return candidate;
+    }
+  }
 
-interface DirtyState {
-  isDirty: boolean;
-  lastChecked: number;
+  return join(homedir(), ".claude", "statusline.sh");
+}
+
+function buildPayload(ctx: ExtensionContext): string {
+  const cwd = ctx.sessionManager.getCwd();
+  const modelId = ctx.model?.id || "";
+  const contextUsage = ctx.getContextUsage();
+  const usedPct = contextUsage?.percent ?? 0;
+  const thinkingLevel = (ctx.sessionManager?.getState?.() as any)?.thinkingLevel || "";
+
+  return JSON.stringify({
+    workspace: {
+      current_dir: cwd,
+    },
+    model: {
+      display_name: modelId,
+    },
+    context_window: {
+      used_percentage: usedPct,
+    },
+    effort: {
+      level: thinkingLevel,
+    },
+  });
 }
 
 export default function statusline(pi: ExtensionAPI) {
-  let isDirty = false;
-  let checkingDirty = false;
-  let cachedCwd = "";
-  let cachedDisplayName = "";
-  let cachedCommonDir = "";
+  let cachedOutput = "";
+  let inFlight = false;
 
-  async function checkGitDirty(cwd: string, tui: TUI) {
-    if (checkingDirty) return;
-    checkingDirty = true;
-    try {
-      // Check unstaged changes
-      let dirty = false;
-      try {
-        await execFileAsync("git", ["--no-optional-locks", "diff", "--quiet"], { cwd });
-      } catch {
-        dirty = true;
-      }
+  function refresh(ctx: ExtensionContext, tui?: TUI) {
+    if (inFlight) return;
+    inFlight = true;
 
-      // Check staged changes if unstaged was clean
-      if (!dirty) {
-        try {
-          await execFileAsync("git", ["--no-optional-locks", "diff", "--cached", "--quiet"], { cwd });
-        } catch {
-          dirty = true;
+    const cwd = ctx.sessionManager.getCwd();
+    const scriptPath = resolveScriptPath(cwd);
+    const payload = buildPayload(ctx);
+
+    const child = execFile(
+      scriptPath,
+      [],
+      { cwd, timeout: 3000, env: { ...process.env, STATUSLINE_NO_MODEL: "" } },
+      (err, stdout) => {
+        inFlight = false;
+        if (!err && stdout) {
+          const formatted = stdout.trimEnd();
+          if (formatted !== cachedOutput) {
+            cachedOutput = formatted;
+            tui?.requestRender();
+          }
         }
       }
+    );
 
-      if (isDirty !== dirty) {
-        isDirty = dirty;
-        tui.requestRender();
-      }
-    } catch {
-      // Not a git repo or git error
-    } finally {
-      checkingDirty = false;
-    }
-  }
-
-  async function resolveDisplayName(cwd: string, branch: string | null): Promise<string> {
-    const dirName = basename(cwd);
-    if (!branch || branch !== dirName) {
-      return dirName;
-    }
-
-    if (cachedCwd === cwd && cachedDisplayName) {
-      return cachedDisplayName;
-    }
-
-    try {
-      const { stdout } = await execFileAsync(
-        "git",
-        ["--no-optional-locks", "rev-parse", "--path-format=absolute", "--git-common-dir"],
-        { cwd }
-      );
-      const commonDir = stdout.trim();
-      if (commonDir) {
-        cachedCwd = cwd;
-        cachedDisplayName = basename(dirname(commonDir));
-        return cachedDisplayName;
-      }
-    } catch {
-      // Fallback to dirName
-    }
-
-    return dirName;
+    child.stdin?.write(payload);
+    child.stdin?.end();
   }
 
   pi.on("session_start", (_event, ctx: ExtensionContext) => {
-    ctx.ui.setFooter((tui, _theme, footerData) => {
-      let displayName = basename(ctx.sessionManager.getCwd());
-
-      // Subscribe to branch changes to re-check dirty state & render
+    ctx.ui.setFooter((tui: TUI, _theme: Theme, footerData) => {
+      // Refresh on branch changes
       const unsubscribeBranch = footerData.onBranchChange(() => {
-        const cwd = ctx.sessionManager.getCwd();
-        const branch = footerData.getGitBranch();
-        void resolveDisplayName(cwd, branch).then((name) => {
-          displayName = name;
-          void checkGitDirty(cwd, tui);
-        });
+        refresh(ctx, tui);
       });
 
-      // Periodic / on-demand dirty state check
-      const dirtyInterval = setInterval(() => {
-        const cwd = ctx.sessionManager.getCwd();
-        void checkGitDirty(cwd, tui);
+      // Periodic refresh
+      const interval = setInterval(() => {
+        refresh(ctx, tui);
       }, 2000);
 
-      // Initial check
-      const initialCwd = ctx.sessionManager.getCwd();
-      const initialBranch = footerData.getGitBranch();
-      void resolveDisplayName(initialCwd, initialBranch).then((name) => {
-        displayName = name;
-        void checkGitDirty(initialCwd, tui);
-      });
+      // Initial execution
+      refresh(ctx, tui);
 
       return {
         render(width: number): string[] {
-          const branch = footerData.getGitBranch();
-
-          // 1. Git segment
-          let gitInfo = "";
-          if (branch) {
-            const dirtyTag = isDirty ? `${red}*${reset}` : "";
-            gitInfo = ` on ${purple}${branchGlyph} ${branch}${reset}${dirtyTag}`;
+          if (!cachedOutput) {
+            return [];
           }
-
-          // 2. Context bar
-          const contextUsage = ctx.getContextUsage();
-          const usedPct = contextUsage?.percent ?? 0;
-          let barDisplay = "";
-          if (usedPct >= 10) {
-            const barWidth = 7;
-            const filled = Math.min(barWidth, Math.max(0, Math.round((usedPct / 100) * barWidth)));
-            const filledBar = barFill.repeat(filled);
-            const emptyBar = barEmpty.repeat(barWidth - filled);
-            barDisplay = `${cyan}${filledBar}${dim}${emptyBar}${reset}`;
-          }
-
-          // 3. Model & Thinking segment
-          const modelId = ctx.model?.id || "";
-          let modelSeg = "";
-          if (modelId) {
-            const match = modelId.match(/(flash|pro|sonnet|haiku|opus|fable|qwen|moonshot|llama|deepseek)/i);
-            const shortModel = match ? match[1].toLowerCase() : modelId.split(/[-_/]/)[0].toLowerCase();
-            modelSeg = `  ${shortModel}`;
-          }
-
-          // 4. Extension status pills
-          const extStatuses = footerData.getExtensionStatuses();
-          let extStr = "";
-          if (extStatuses.size > 0) {
-            const items = Array.from(extStatuses.values()).map((s) => s.replace(/[\r\n\t]/g, " ").trim());
-            extStr = `  ${dim}${items.join(" ")}${reset}`;
-          }
-
-          // 5. Compose full line
-          const usageSegments = [barDisplay, modelSeg, extStr].filter(Boolean).join("");
-          const usageDisplay = usageSegments ? `  ${usageSegments}` : "";
-          const fullLine = `${cyan}${displayName}${reset}${gitInfo}${usageDisplay}`;
-
-          return [truncateToWidth(fullLine, width, "...")];
+          return [truncateToWidth(cachedOutput, width, "...")];
         },
         dispose() {
           unsubscribeBranch();
-          clearInterval(dirtyInterval);
+          clearInterval(interval);
         },
       };
     });
+  });
+
+  pi.on("agent_settled", (_event, ctx: ExtensionContext) => {
+    refresh(ctx);
+  });
+
+  pi.on("agent_end", (_event, ctx: ExtensionContext) => {
+    refresh(ctx);
   });
 }

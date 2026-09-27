@@ -137,6 +137,12 @@ if [ ! -h "$HOME/.claude/skills" ]; then
   fi
 fi
 
+if [ -f "$DOTFILES_ROOT/claude/statusline.sh" ] && [ ! -h "$HOME/.claude/statusline.sh" ]; then
+  [ -f "$HOME/.claude/statusline.sh" ] && mv "$HOME/.claude/statusline.sh" "$HOME/.claude/statusline.sh.backup"
+  ln -s "$DOTFILES_ROOT/claude/statusline.sh" "$HOME/.claude/statusline.sh"
+  echo "  [link] Linked claude/statusline.sh -> ~/.claude/statusline.sh"
+fi
+
 if [ ! -h "$HOME/.codex/AGENTS.md" ]; then
   [ -f "$HOME/.codex/AGENTS.md" ] && mv "$HOME/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md.backup"
   ln -s "$HOME/.config/AGENTS.md" "$HOME/.codex/AGENTS.md"

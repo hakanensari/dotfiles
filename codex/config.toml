@@ -4,6 +4,7 @@ approvals_reviewer = "user"
 
 [tui]
 theme = "catppuccin-latte"
+screen_reader_detection_done = true
 
 
 [tui.model_availability_nux]
@@ -36,7 +37,7 @@ trusted_hash = "sha256:fcec2a18f441c5694bc9469cf13d7014e823c57ab420e02d63a8bf7eb
 trusted_hash = "sha256:32c80cd33fbfcfc4ae4f2feca77149fe3334b1113c6598676f753fd942500de2"
 
 [hooks.state."/Users/hakanensari/.codex/hooks.json:user_prompt_submit:0:0"]
-trusted_hash = "sha256:7f2f95a2d4182487209efc8ab7a6c5b0b61351c77df3048000f79ef42e4cb497"
+trusted_hash = "sha256:78297874884298bf02ef5d48433f2bb34166de580ee027e9e85d564cdf23fe63"
 
 [hooks.state."/Users/hakanensari/.codex/hooks.json:user_prompt_submit:1:0"]
 trusted_hash = "sha256:78297874884298bf02ef5d48433f2bb34166de580ee027e9e85d564cdf23fe63"
@@ -56,4 +57,10 @@ enabled = true
 hooks = true
 
 [projects."/Users/hakanensari/code/canape"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code/fut"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code/frankfurter"]
 trust_level = "trusted"

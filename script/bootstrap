@@ -53,6 +53,22 @@ if [ -d "$DOTFILES_ROOT/direnv" ]; then
   done
 fi
 
+# Symlink ~/.config/ghostty/ settings
+mkdir -p "$HOME/.config/ghostty"
+if [ -d "$DOTFILES_ROOT/ghostty" ]; then
+  for f in "$DOTFILES_ROOT/ghostty"/*; do
+    name="$(basename "$f")"
+    target="$HOME/.config/ghostty/$name"
+    if [ ! -h "$target" ]; then
+      if [ -f "$target" ]; then
+        mv "$target" "$target.backup"
+      fi
+      ln -s "$f" "$target"
+      echo "  [link] Linked ghostty/$name -> ~/.config/ghostty/$name"
+    fi
+  done
+fi
+
 # Symlink ~/.config/zed/ settings and keymap
 mkdir -p "$HOME/.config/zed"
 if [ -d "$DOTFILES_ROOT/zed" ]; then

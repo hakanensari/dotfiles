@@ -106,6 +106,7 @@ if command -v npx >/dev/null 2>&1; then
   npx skills add ogulcancelik/agent-skills --skill web-search --agent pi -g -y 2>/dev/null || true
   npx skills add obra/superpowers --skill '*' -g -y 2>/dev/null || true
   npx skills add herdrdev/herdr --skill herdr -g -y 2>/dev/null || true
+  npx skills add tailscale/tailscale-skill --skill tailscale -g -y 2>/dev/null || true
 fi
 
 # Symlink ~/.config/AGENTS.md

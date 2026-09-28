@@ -12,14 +12,14 @@ screen_reader_detection_done = true
 "gpt-5.6-sol" = 4
 gpt-6-astra = 4
 
-[mcp_servers.OpenWhisperer]
-url = "http://localhost:8000/mcp"
-
-[mcp_servers.OpenWhisperer.tools.speak]
-approval_mode = "approve"
-
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
+
+[mcp_servers.psst]
+url = "http://127.0.0.1:7778/mcp"
+
+[mcp_servers.psst.tools.speak]
+approval_mode = "approve"
 
 [[hooks.UserPromptSubmit]]
 
@@ -63,4 +63,7 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/Users/hakanensari/code/frankfurter"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code/psst"]
 trust_level = "trusted"

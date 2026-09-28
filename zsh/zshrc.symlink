@@ -18,3 +18,9 @@ fi
 
 # Pi
 export PATH="/Users/hakanensari/.local/share/mise/installs/node/24.19.0/bin:$PATH"
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<

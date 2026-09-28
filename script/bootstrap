@@ -235,6 +235,11 @@ if [ -d "$DOTFILES_ROOT/bin" ]; then
   done
 fi
 
+# Bundle Homebrew packages, casks, and services (incl. codex, herdr)
+if command -v brew >/dev/null 2>&1 && [ -f "$DOTFILES_ROOT/brew/Brewfile" ]; then
+  "$DOTFILES_ROOT/script/brew"
+fi
+
 # Install mise and declared runtimes
 if ! command -v mise >/dev/null 2>&1; then
   echo "Installing standalone mise..."
@@ -244,6 +249,28 @@ fi
 if command -v mise >/dev/null 2>&1; then
   echo "Installing declared runtimes via mise..."
   mise install
+fi
+
+# Install coding agents if missing
+if ! command -v claude >/dev/null 2>&1; then
+  echo "Installing Claude Code..."
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+if ! command -v pi >/dev/null 2>&1; then
+  echo "Installing Pi..."
+  npm install -g @earendil-works/pi-coding-agent
+fi
+
+if ! command -v agy >/dev/null 2>&1; then
+  echo "Installing Antigravity..."
+  curl -fsSL https://antigravity.google.com/install.sh | bash
+fi
+
+# Ensure Herdr agent integrations
+if command -v herdr >/dev/null 2>&1; then
+  echo "Ensuring Herdr agent integrations..."
+  herdr integration install all >/dev/null 2>&1 || true
 fi
 
 # Initialize RTK hooks and instructions

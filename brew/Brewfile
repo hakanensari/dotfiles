@@ -1,5 +1,6 @@
 # Core Developer Tools & Utilities
 brew "awscli"
+brew "direnv"
 brew "gh"
 brew "git"
 brew "htop"

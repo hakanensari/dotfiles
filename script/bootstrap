@@ -139,7 +139,7 @@ if [ -f "$DOTFILES_ROOT/agents/AGENTS.md" ]; then
 fi
 
 # Symlink agent instructions into tool directories
-mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.gemini"
+mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.gemini" "$HOME/.grok"
 
 if [ ! -h "$HOME/.claude/CLAUDE.md" ]; then
   [ -f "$HOME/.claude/CLAUDE.md" ] && mv "$HOME/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md.backup"
@@ -179,6 +179,20 @@ if [ ! -h "$HOME/.gemini/config/skills" ]; then
   if [ ! -e "$HOME/.gemini/config/skills" ]; then
     ln -s "$HOME/.agents/skills" "$HOME/.gemini/config/skills"
     echo "  [link] Linked ~/.agents/skills -> ~/.gemini/config/skills"
+  fi
+fi
+
+if [ ! -h "$HOME/.grok/AGENTS.md" ]; then
+  [ -f "$HOME/.grok/AGENTS.md" ] && mv "$HOME/.grok/AGENTS.md" "$HOME/.grok/AGENTS.md.backup"
+  ln -s "$HOME/.config/AGENTS.md" "$HOME/.grok/AGENTS.md"
+  echo "  [link] Linked ~/.config/AGENTS.md -> ~/.grok/AGENTS.md"
+fi
+
+if [ ! -h "$HOME/.grok/skills" ]; then
+  [ -d "$HOME/.grok/skills" ] && rmdir "$HOME/.grok/skills" 2>/dev/null || true
+  if [ ! -e "$HOME/.grok/skills" ]; then
+    ln -s "$HOME/.agents/skills" "$HOME/.grok/skills"
+    echo "  [link] Linked ~/.agents/skills -> ~/.grok/skills"
   fi
 fi
 
@@ -282,6 +296,11 @@ fi
 if ! command -v agy >/dev/null 2>&1; then
   echo "Installing Antigravity..."
   curl -fsSL https://antigravity.google.com/install.sh | bash
+fi
+
+if ! command -v grok >/dev/null 2>&1; then
+  echo "Installing Grok..."
+  curl -fsSL https://x.ai/cli/install.sh | bash
 fi
 
 # Ensure Herdr agent integrations

@@ -196,6 +196,20 @@ if [ ! -h "$HOME/.grok/skills" ]; then
   fi
 fi
 
+if [ -f "$DOTFILES_ROOT/grok/config.toml" ] && [ ! -h "$HOME/.grok/config.toml" ]; then
+  if [ -f "$HOME/.grok/config.toml" ]; then
+    mv "$HOME/.grok/config.toml" "$HOME/.grok/config.toml.backup"
+  fi
+  ln -s "$DOTFILES_ROOT/grok/config.toml" "$HOME/.grok/config.toml"
+  echo "  [link] Linked grok/config.toml -> ~/.grok/config.toml"
+fi
+
+if [ -f "$DOTFILES_ROOT/grok/statusline.sh" ] && [ ! -h "$HOME/.grok/statusline.sh" ]; then
+  [ -f "$HOME/.grok/statusline.sh" ] && mv "$HOME/.grok/statusline.sh" "$HOME/.grok/statusline.sh.backup"
+  ln -s "$DOTFILES_ROOT/grok/statusline.sh" "$HOME/.grok/statusline.sh"
+  echo "  [link] Linked grok/statusline.sh -> ~/.grok/statusline.sh"
+fi
+
 # Link ~/.gemini/antigravity-cli/ keybindings and seed settings if missing
 mkdir -p "$HOME/.gemini/antigravity-cli"
 if [ -f "$DOTFILES_ROOT/agy/keybindings.json" ] && [ ! -h "$HOME/.gemini/antigravity-cli/keybindings.json" ]; then

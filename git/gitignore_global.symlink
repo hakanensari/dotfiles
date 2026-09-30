@@ -19,3 +19,8 @@ CLAUDE.local.md
 node_modules
 skills-lock.json
 tmp
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+DerivedData/
+build/

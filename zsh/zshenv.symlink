@@ -10,3 +10,11 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 export FORCE_HYPERLINK=1
 
+# Use standalone Chrome for Testing for background web search to avoid hijacking main Google Chrome
+for _chrome_testing in "$HOME"/Library/Caches/ms-playwright/chromium-*/chrome-mac-arm64/Google\ Chrome\ for\ Testing.app/Contents/MacOS/Google\ Chrome\ for\ Testing; do
+  if [ -x "$_chrome_testing" ]; then
+    export WEB_SEARCH_BROWSER_BIN="$_chrome_testing"
+    break
+  fi
+done
+

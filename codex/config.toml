@@ -67,8 +67,5 @@ trust_level = "trusted"
 [projects."/Users/hakanensari/code/personal-agent"]
 trust_level = "trusted"
 
-[projects."/Users/hakanensari/code"]
-trust_level = "trusted"
-
 [projects."/Users/hakanensari/code/peddler"]
 trust_level = "trusted"

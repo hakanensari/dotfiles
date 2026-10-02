@@ -6,19 +6,19 @@ approvals_reviewer = "user"
 theme = "catppuccin-latte"
 screen_reader_detection_done = true
 
-
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 "gpt-5.6-sol" = 4
 gpt-6-astra = 4
+"gpt-6.1-sol" = 4
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 
-[mcp_servers.psst]
+[mcp_servers.PSST]
 url = "http://127.0.0.1:7778/mcp"
 
-[mcp_servers.psst.tools.speak]
+[mcp_servers.PSST.tools.say]
 approval_mode = "approve"
 
 [hooks.state]
@@ -62,4 +62,13 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/Users/hakanensari/code/lineofflight"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code/personal-agent"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code"]
+trust_level = "trusted"
+
+[projects."/Users/hakanensari/code/peddler"]
 trust_level = "trusted"

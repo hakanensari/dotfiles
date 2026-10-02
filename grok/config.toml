@@ -9,10 +9,6 @@ official_marketplace_auto_installed = true
 name = "xAI Official"
 git = "https://github.com/xai-org/plugin-marketplace.git"
 
-[mcp_servers.psst]
-url = "http://localhost:7778/mcp"
-enabled = true
-
 [ui]
 max_thoughts_width = 120
 fork_secondary_model = "grok-4.6"
@@ -22,3 +18,10 @@ compact_mode = false
 [ui.status_line]
 type = "command"
 command = "~/.grok/statusline.sh"
+
+[privacy]
+privacy_banner_acked = "2026-09-30T07:16:38Z"
+
+[mcp_servers.PSST]
+url = "http://127.0.0.1:7778/mcp"
+enabled = true

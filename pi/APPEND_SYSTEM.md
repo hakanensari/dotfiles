@@ -4,3 +4,8 @@
 - Only use tools (reading files, bash commands) when the user explicitly asks about local project files or when concrete implementation details are required.
 - Do not search the filesystem to explain acronyms, symbols, error strings, or general computing concepts unless explicitly instructed.
 - Never run unbounded or recursive searches (such as `find ~`, broad unanchored greps, or scanning dependencies). Keep all tool usage focused, minimal, and hypothesis-driven.
+
+# Codemode
+
+- `searchTools()`, `describeTool()`, `describeNamespace()` and `tools.<name>()` return promises: `await` them.
+- `ALL_TOOLS` is an array of `{ name, description }`.

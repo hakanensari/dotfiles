@@ -139,7 +139,7 @@ if [ -f "$DOTFILES_ROOT/agents/AGENTS.md" ]; then
 fi
 
 # Symlink agent instructions into tool directories
-mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.gemini" "$HOME/.grok"
+mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.gemini" "$HOME/.grok" "$HOME/.pi/agent"
 
 if [ ! -h "$HOME/.claude/CLAUDE.md" ]; then
   [ -f "$HOME/.claude/CLAUDE.md" ] && mv "$HOME/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md.backup"
@@ -186,6 +186,12 @@ if [ ! -h "$HOME/.grok/AGENTS.md" ]; then
   [ -f "$HOME/.grok/AGENTS.md" ] && mv "$HOME/.grok/AGENTS.md" "$HOME/.grok/AGENTS.md.backup"
   ln -s "$HOME/.config/AGENTS.md" "$HOME/.grok/AGENTS.md"
   echo "  [link] Linked ~/.config/AGENTS.md -> ~/.grok/AGENTS.md"
+fi
+
+if [ ! -h "$HOME/.pi/agent/AGENTS.md" ]; then
+  [ -f "$HOME/.pi/agent/AGENTS.md" ] && mv "$HOME/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md.backup"
+  ln -s "$HOME/.config/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
+  echo "  [link] Linked ~/.config/AGENTS.md -> ~/.pi/agent/AGENTS.md"
 fi
 
 if [ ! -h "$HOME/.grok/skills" ]; then

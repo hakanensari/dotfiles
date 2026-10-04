@@ -235,14 +235,11 @@ if [ -f "$DOTFILES_ROOT/agy/settings.json" ] && [ ! -f "$HOME/.gemini/antigravit
   echo "  [seed] Seeded agy/settings.json -> ~/.gemini/antigravity-cli/settings.json"
 fi
 
-# Symlink ~/.codex/config.toml
+# Seed ~/.codex/config.toml if missing
 mkdir -p "$HOME/.codex"
-if [ -f "$DOTFILES_ROOT/codex/config.toml" ] && [ ! -h "$HOME/.codex/config.toml" ]; then
-  if [ -f "$HOME/.codex/config.toml" ]; then
-    mv "$HOME/.codex/config.toml" "$HOME/.codex/config.toml.backup"
-  fi
-  ln -s "$DOTFILES_ROOT/codex/config.toml" "$HOME/.codex/config.toml"
-  echo "  [link] Linked codex/config.toml -> ~/.codex/config.toml"
+if [ -f "$DOTFILES_ROOT/codex/config.toml" ] && [ ! -f "$HOME/.codex/config.toml" ]; then
+  cp "$DOTFILES_ROOT/codex/config.toml" "$HOME/.codex/config.toml"
+  echo "  [seed] Seeded codex/config.toml -> ~/.codex/config.toml"
 fi
 
 # Symlink ~/.pi/agent/extensions

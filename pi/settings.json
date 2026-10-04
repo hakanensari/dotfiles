@@ -1,0 +1,9 @@
+{
+  "defaultModel": "Qwen3.8-27B-Q4_K_M",
+  "defaultProvider": "_local",
+  "enableInstallTelemetry": false,
+  "theme": "light/dark",
+  "defaultThinkingLevel": "low",
+  "quietStartup": true,
+  "defaultProjectTrust": "ask"
+}

@@ -19,9 +19,6 @@ compact_mode = false
 type = "command"
 command = "~/.grok/statusline.sh"
 
-[privacy]
-privacy_banner_acked = "2026-09-30T07:16:38Z"
-
 [mcp_servers.PSST]
 url = "http://127.0.0.1:7778/mcp"
 enabled = true

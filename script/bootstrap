@@ -161,6 +161,12 @@ if [ -f "$DOTFILES_ROOT/claude/statusline.sh" ] && [ ! -h "$HOME/.claude/statusl
   echo "  [link] Linked claude/statusline.sh -> ~/.claude/statusline.sh"
 fi
 
+# Seed ~/.claude/settings.json if missing
+if [ -f "$DOTFILES_ROOT/claude/settings.json" ] && [ ! -f "$HOME/.claude/settings.json" ]; then
+  cp "$DOTFILES_ROOT/claude/settings.json" "$HOME/.claude/settings.json"
+  echo "  [seed] Seeded claude/settings.json -> ~/.claude/settings.json"
+fi
+
 if [ ! -h "$HOME/.codex/AGENTS.md" ]; then
   [ -f "$HOME/.codex/AGENTS.md" ] && mv "$HOME/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md.backup"
   ln -s "$HOME/.config/AGENTS.md" "$HOME/.codex/AGENTS.md"
@@ -202,12 +208,10 @@ if [ ! -h "$HOME/.grok/skills" ]; then
   fi
 fi
 
-if [ -f "$DOTFILES_ROOT/grok/config.toml" ] && [ ! -h "$HOME/.grok/config.toml" ]; then
-  if [ -f "$HOME/.grok/config.toml" ]; then
-    mv "$HOME/.grok/config.toml" "$HOME/.grok/config.toml.backup"
-  fi
-  ln -s "$DOTFILES_ROOT/grok/config.toml" "$HOME/.grok/config.toml"
-  echo "  [link] Linked grok/config.toml -> ~/.grok/config.toml"
+# Seed ~/.grok/config.toml if missing
+if [ -f "$DOTFILES_ROOT/grok/config.toml" ] && [ ! -f "$HOME/.grok/config.toml" ]; then
+  cp "$DOTFILES_ROOT/grok/config.toml" "$HOME/.grok/config.toml"
+  echo "  [seed] Seeded grok/config.toml -> ~/.grok/config.toml"
 fi
 
 if [ -f "$DOTFILES_ROOT/grok/statusline.sh" ] && [ ! -h "$HOME/.grok/statusline.sh" ]; then
@@ -265,6 +269,17 @@ if [ -f "$DOTFILES_ROOT/pi/APPEND_SYSTEM.md" ] && [ ! -h "$HOME/.pi/agent/APPEND
   fi
   ln -s "$DOTFILES_ROOT/pi/APPEND_SYSTEM.md" "$HOME/.pi/agent/APPEND_SYSTEM.md"
   echo "  [link] Linked pi/APPEND_SYSTEM.md -> ~/.pi/agent/APPEND_SYSTEM.md"
+fi
+
+# Seed ~/.pi/agent/settings.json and mcp.json if missing
+if [ -f "$DOTFILES_ROOT/pi/settings.json" ] && [ ! -f "$HOME/.pi/agent/settings.json" ]; then
+  cp "$DOTFILES_ROOT/pi/settings.json" "$HOME/.pi/agent/settings.json"
+  echo "  [seed] Seeded pi/settings.json -> ~/.pi/agent/settings.json"
+fi
+
+if [ -f "$DOTFILES_ROOT/pi/mcp.json" ] && [ ! -f "$HOME/.pi/agent/mcp.json" ]; then
+  cp "$DOTFILES_ROOT/pi/mcp.json" "$HOME/.pi/agent/mcp.json"
+  echo "  [seed] Seeded pi/mcp.json -> ~/.pi/agent/mcp.json"
 fi
 
 # Symlink scripts from dotfiles/bin into ~/.local/bin

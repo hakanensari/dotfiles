@@ -1,4 +1,5 @@
 {
+  "agentMode": "accept-edits",
   "allowNonWorkspaceAccess": true,
   "artifactReviewPolicy": "always-proceed",
   "editorMode": "vim",
@@ -7,6 +8,7 @@
   "runningLightSpeed": "fast",
   "showFeedbackSurvey": false,
   "showTips": false,
+  "toolPermission": "always-proceed",
   "verbosity": "low",
   "vimInsertFirst": true
 }

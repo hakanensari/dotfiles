@@ -1,7 +1,8 @@
 onboarding = false
 
 [theme]
-auto_switch = true
+name = "terminal"
+auto_switch = false
 
 [ui]
 prompt_new_tab_name = false

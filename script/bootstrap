@@ -322,7 +322,11 @@ fi
 
 if ! command -v pi >/dev/null 2>&1; then
   echo "Installing Pi..."
-  npm install -g @earendil-works/pi-coding-agent
+  if [ -w "$(npm root -g 2>/dev/null || echo /usr/lib/node_modules)" ]; then
+    npm install -g @earendil-works/pi-coding-agent
+  else
+    sudo npm install -g @earendil-works/pi-coding-agent
+  fi
 fi
 
 if ! command -v agy >/dev/null 2>&1; then

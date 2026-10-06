@@ -14,6 +14,11 @@ find "$DOTFILES_ROOT" -name "*.symlink" | while read -r src; do
   file="$(basename "$src" .symlink)"
   target="$HOME/.$file"
 
+  # Skip zsh dotfiles on non-macOS unless zsh is actually installed
+  if [ "$(uname -s)" != "Darwin" ] && [[ "$file" == zsh* ]] && ! command -v zsh >/dev/null 2>&1; then
+    continue
+  fi
+
   if [ -h "$target" ]; then
     echo "  [skip] Symlink already exists: $target"
   elif [ -f "$target" ] || [ -d "$target" ]; then
@@ -290,6 +295,9 @@ mkdir -p "$HOME/.local/bin"
 if [ -d "$DOTFILES_ROOT/bin" ]; then
   find "$DOTFILES_ROOT/bin" -type f | while read -r script; do
     name="$(basename "$script")"
+    if [ "$name" = "zed-editor" ] && ! command -v zed >/dev/null 2>&1; then
+      continue
+    fi
     target="$HOME/.local/bin/$name"
     if [ ! -h "$target" ]; then
       if [ -f "$target" ]; then
@@ -323,23 +331,25 @@ if ! command -v claude >/dev/null 2>&1; then
   curl -fsSL https://claude.ai/install.sh | bash
 fi
 
-if ! command -v pi >/dev/null 2>&1; then
-  echo "Installing Pi..."
-  if [ -w "$(npm root -g 2>/dev/null || echo /usr/lib/node_modules)" ]; then
-    npm install -g @earendil-works/pi-coding-agent
-  else
-    sudo npm install -g @earendil-works/pi-coding-agent
-  fi
-fi
-
 if ! command -v agy >/dev/null 2>&1; then
   echo "Installing Antigravity..."
   curl -fsSL https://antigravity.google.com/install.sh | bash
 fi
 
-if ! command -v grok >/dev/null 2>&1; then
-  echo "Installing Grok..."
-  curl -fsSL https://x.ai/cli/install.sh | bash
+if [ "$(uname -s)" = "Darwin" ]; then
+  if ! command -v pi >/dev/null 2>&1; then
+    echo "Installing Pi..."
+    if [ -w "$(npm root -g 2>/dev/null || echo /usr/lib/node_modules)" ]; then
+      npm install -g @earendil-works/pi-coding-agent
+    else
+      sudo npm install -g @earendil-works/pi-coding-agent
+    fi
+  fi
+
+  if ! command -v grok >/dev/null 2>&1; then
+    echo "Installing Grok..."
+    curl -fsSL https://x.ai/cli/install.sh | bash
+  fi
 fi
 
 # Ensure Herdr agent integrations

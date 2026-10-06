@@ -147,7 +147,7 @@ if [ -f "$DOTFILES_ROOT/agents/AGENTS.md" ]; then
 fi
 
 # Symlink agent instructions into tool directories
-mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.gemini" "$HOME/.grok" "$HOME/.pi/agent"
+mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.gemini"
 
 if [ ! -h "$HOME/.claude/CLAUDE.md" ]; then
   [ -f "$HOME/.claude/CLAUDE.md" ] && mv "$HOME/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md.backup"
@@ -196,36 +196,41 @@ if [ ! -h "$HOME/.gemini/config/skills" ]; then
   fi
 fi
 
-if [ ! -h "$HOME/.grok/AGENTS.md" ]; then
-  [ -f "$HOME/.grok/AGENTS.md" ] && mv "$HOME/.grok/AGENTS.md" "$HOME/.grok/AGENTS.md.backup"
-  ln -s "$HOME/.config/AGENTS.md" "$HOME/.grok/AGENTS.md"
-  echo "  [link] Linked ~/.config/AGENTS.md -> ~/.grok/AGENTS.md"
-fi
+# Grok and Pi desktop agent settings (macOS only)
+if [ "$(uname -s)" = "Darwin" ]; then
+  mkdir -p "$HOME/.grok" "$HOME/.pi/agent"
 
-if [ ! -h "$HOME/.pi/agent/AGENTS.md" ]; then
-  [ -f "$HOME/.pi/agent/AGENTS.md" ] && mv "$HOME/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md.backup"
-  ln -s "$HOME/.config/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
-  echo "  [link] Linked ~/.config/AGENTS.md -> ~/.pi/agent/AGENTS.md"
-fi
-
-if [ ! -h "$HOME/.grok/skills" ]; then
-  [ -d "$HOME/.grok/skills" ] && rmdir "$HOME/.grok/skills" 2>/dev/null || true
-  if [ ! -e "$HOME/.grok/skills" ]; then
-    ln -s "$HOME/.agents/skills" "$HOME/.grok/skills"
-    echo "  [link] Linked ~/.agents/skills -> ~/.grok/skills"
+  if [ ! -h "$HOME/.grok/AGENTS.md" ]; then
+    [ -f "$HOME/.grok/AGENTS.md" ] && mv "$HOME/.grok/AGENTS.md" "$HOME/.grok/AGENTS.md.backup"
+    ln -s "$HOME/.config/AGENTS.md" "$HOME/.grok/AGENTS.md"
+    echo "  [link] Linked ~/.config/AGENTS.md -> ~/.grok/AGENTS.md"
   fi
-fi
 
-# Seed ~/.grok/config.toml if missing
-if [ -f "$DOTFILES_ROOT/grok/config.toml" ] && [ ! -f "$HOME/.grok/config.toml" ]; then
-  cp "$DOTFILES_ROOT/grok/config.toml" "$HOME/.grok/config.toml"
-  echo "  [seed] Seeded grok/config.toml -> ~/.grok/config.toml"
-fi
+  if [ ! -h "$HOME/.pi/agent/AGENTS.md" ]; then
+    [ -f "$HOME/.pi/agent/AGENTS.md" ] && mv "$HOME/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md.backup"
+    ln -s "$HOME/.config/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
+    echo "  [link] Linked ~/.config/AGENTS.md -> ~/.pi/agent/AGENTS.md"
+  fi
 
-if [ -f "$DOTFILES_ROOT/grok/statusline.sh" ] && [ ! -h "$HOME/.grok/statusline.sh" ]; then
-  [ -f "$HOME/.grok/statusline.sh" ] && mv "$HOME/.grok/statusline.sh" "$HOME/.grok/statusline.sh.backup"
-  ln -s "$DOTFILES_ROOT/grok/statusline.sh" "$HOME/.grok/statusline.sh"
-  echo "  [link] Linked grok/statusline.sh -> ~/.grok/statusline.sh"
+  if [ ! -h "$HOME/.grok/skills" ]; then
+    [ -d "$HOME/.grok/skills" ] && rmdir "$HOME/.grok/skills" 2>/dev/null || true
+    if [ ! -e "$HOME/.grok/skills" ]; then
+      ln -s "$HOME/.agents/skills" "$HOME/.grok/skills"
+      echo "  [link] Linked ~/.agents/skills -> ~/.grok/skills"
+    fi
+  fi
+
+  # Seed ~/.grok/config.toml if missing
+  if [ -f "$DOTFILES_ROOT/grok/config.toml" ] && [ ! -f "$HOME/.grok/config.toml" ]; then
+    cp "$DOTFILES_ROOT/grok/config.toml" "$HOME/.grok/config.toml"
+    echo "  [seed] Seeded grok/config.toml -> ~/.grok/config.toml"
+  fi
+
+  if [ -f "$DOTFILES_ROOT/grok/statusline.sh" ] && [ ! -h "$HOME/.grok/statusline.sh" ]; then
+    [ -f "$HOME/.grok/statusline.sh" ] && mv "$HOME/.grok/statusline.sh" "$HOME/.grok/statusline.sh.backup"
+    ln -s "$DOTFILES_ROOT/grok/statusline.sh" "$HOME/.grok/statusline.sh"
+    echo "  [link] Linked grok/statusline.sh -> ~/.grok/statusline.sh"
+  fi
 fi
 
 # Link ~/.gemini/antigravity-cli/ keybindings and seed settings if missing
@@ -254,40 +259,42 @@ if [ -f "$DOTFILES_ROOT/codex/config.toml" ] && [ ! -f "$HOME/.codex/config.toml
   echo "  [seed] Seeded codex/config.toml -> ~/.codex/config.toml"
 fi
 
-# Symlink ~/.pi/agent/extensions
-mkdir -p "$HOME/.pi/agent/extensions"
-if [ -d "$DOTFILES_ROOT/pi/extensions" ]; then
-  for f in "$DOTFILES_ROOT/pi/extensions"/*; do
-    name="$(basename "$f")"
-    target="$HOME/.pi/agent/extensions/$name"
-    if [ ! -h "$target" ]; then
-      if [ -f "$target" ]; then
-        mv "$target" "$target.backup"
+# Symlink Pi agent extensions and configs (macOS only)
+if [ "$(uname -s)" = "Darwin" ]; then
+  mkdir -p "$HOME/.pi/agent/extensions"
+  if [ -d "$DOTFILES_ROOT/pi/extensions" ]; then
+    for f in "$DOTFILES_ROOT/pi/extensions"/*; do
+      name="$(basename "$f")"
+      target="$HOME/.pi/agent/extensions/$name"
+      if [ ! -h "$target" ]; then
+        if [ -f "$target" ]; then
+          mv "$target" "$target.backup"
+        fi
+        ln -s "$f" "$target"
+        echo "  [link] Linked pi/extensions/$name -> ~/.pi/agent/extensions/$name"
       fi
-      ln -s "$f" "$target"
-      echo "  [link] Linked pi/extensions/$name -> ~/.pi/agent/extensions/$name"
-    fi
-  done
-fi
-
-# Symlink ~/.pi/agent/APPEND_SYSTEM.md
-if [ -f "$DOTFILES_ROOT/pi/APPEND_SYSTEM.md" ] && [ ! -h "$HOME/.pi/agent/APPEND_SYSTEM.md" ]; then
-  if [ -f "$HOME/.pi/agent/APPEND_SYSTEM.md" ]; then
-    mv "$HOME/.pi/agent/APPEND_SYSTEM.md" "$HOME/.pi/agent/APPEND_SYSTEM.md.backup"
+    done
   fi
-  ln -s "$DOTFILES_ROOT/pi/APPEND_SYSTEM.md" "$HOME/.pi/agent/APPEND_SYSTEM.md"
-  echo "  [link] Linked pi/APPEND_SYSTEM.md -> ~/.pi/agent/APPEND_SYSTEM.md"
-fi
 
-# Seed ~/.pi/agent/settings.json and mcp.json if missing
-if [ -f "$DOTFILES_ROOT/pi/settings.json" ] && [ ! -f "$HOME/.pi/agent/settings.json" ]; then
-  cp "$DOTFILES_ROOT/pi/settings.json" "$HOME/.pi/agent/settings.json"
-  echo "  [seed] Seeded pi/settings.json -> ~/.pi/agent/settings.json"
-fi
+  # Symlink ~/.pi/agent/APPEND_SYSTEM.md
+  if [ -f "$DOTFILES_ROOT/pi/APPEND_SYSTEM.md" ] && [ ! -h "$HOME/.pi/agent/APPEND_SYSTEM.md" ]; then
+    if [ -f "$HOME/.pi/agent/APPEND_SYSTEM.md" ]; then
+      mv "$HOME/.pi/agent/APPEND_SYSTEM.md" "$HOME/.pi/agent/APPEND_SYSTEM.md.backup"
+    fi
+    ln -s "$DOTFILES_ROOT/pi/APPEND_SYSTEM.md" "$HOME/.pi/agent/APPEND_SYSTEM.md"
+    echo "  [link] Linked pi/APPEND_SYSTEM.md -> ~/.pi/agent/APPEND_SYSTEM.md"
+  fi
 
-if [ -f "$DOTFILES_ROOT/pi/mcp.json" ] && [ ! -f "$HOME/.pi/agent/mcp.json" ]; then
-  cp "$DOTFILES_ROOT/pi/mcp.json" "$HOME/.pi/agent/mcp.json"
-  echo "  [seed] Seeded pi/mcp.json -> ~/.pi/agent/mcp.json"
+  # Seed ~/.pi/agent/settings.json and mcp.json if missing
+  if [ -f "$DOTFILES_ROOT/pi/settings.json" ] && [ ! -f "$HOME/.pi/agent/settings.json" ]; then
+    cp "$DOTFILES_ROOT/pi/settings.json" "$HOME/.pi/agent/settings.json"
+    echo "  [seed] Seeded pi/settings.json -> ~/.pi/agent/settings.json"
+  fi
+
+  if [ -f "$DOTFILES_ROOT/pi/mcp.json" ] && [ ! -f "$HOME/.pi/agent/mcp.json" ]; then
+    cp "$DOTFILES_ROOT/pi/mcp.json" "$HOME/.pi/agent/mcp.json"
+    echo "  [seed] Seeded pi/mcp.json -> ~/.pi/agent/mcp.json"
+  fi
 fi
 
 # Symlink scripts from dotfiles/bin into ~/.local/bin

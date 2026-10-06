@@ -34,10 +34,27 @@ if [ -n "$local_script" ] && [ -f "$local_script" ]; then
 else
     # Fallback: Translate JSON and run the global Claude statusline script
     translated_input=$(echo "$input" | python3 -c "
-import sys, json
+import sys, json, time
 try:
     d = json.loads(sys.stdin.read())
     d['workspace'] = {'current_dir': d.get('cwd', '')}
+    if 'quota' in d and 'rate_limits' not in d:
+        q = d.get('quota', {})
+        m = (d.get('model', {}).get('id') or d.get('model', {}).get('display_name') or '').lower()
+        is_3p = not ('gemini' in m)
+        h5 = q.get('3p-5h' if is_3p else 'gemini-5h', {})
+        w7 = q.get('3p-weekly' if is_3p else 'gemini-weekly', {})
+        rl = {}
+        if h5.get('remaining_fraction') is not None:
+            rl['five_hour'] = {'used_percentage': round((1.0 - h5['remaining_fraction']) * 100)}
+        if w7.get('remaining_fraction') is not None:
+            res_sec = w7.get('reset_in_seconds')
+            res_epoch = int(time.time() + res_sec) if res_sec is not None else None
+            rl['seven_day'] = {
+                'used_percentage': round((1.0 - w7['remaining_fraction']) * 100),
+                'resets_at': res_epoch
+            }
+        d['rate_limits'] = rl
     print(json.dumps(d))
 except Exception:
     pass

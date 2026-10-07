@@ -8,4 +8,10 @@ DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "Bundling Homebrew packages from $DOTFILES_ROOT/brew/Brewfile..."
 brew bundle --file="$DOTFILES_ROOT/brew/Brewfile"
+
+if command -v herdr >/dev/null 2>&1 && security find-identity -p codesigning 2>/dev/null | grep -q "psst-dev"; then
+  echo "Re-signing herdr with psst-dev for persistent TCC permissions..."
+  codesign -f -s "psst-dev" --identifier "com.herdrdev.herdr" "$(which herdr)" 2>/dev/null || true
+fi
+
 echo "Homebrew bundle complete!"

@@ -11,7 +11,7 @@
 - Across replies, commits, and comments, use the minimum words needed. Short paragraphs, straight to the point, no padding.
 - Friendly but neutral tone. Natural contractions.
 - No emojis unless requested.
-- No em dashes in running prose. Bold sparingly.
+- No em dashes in running prose. Bold sparingly (no bold lead-ins on bullets).
 - When linking a local file in chat, write out the full file URL: `[label](file:///path)`.
 - Banned phrases:
   - "This isn't X. This is Y."

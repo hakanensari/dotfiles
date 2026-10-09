@@ -1,0 +1,83 @@
+{
+  "providers": {
+    "_local": {
+      "name": "Local (llama.cpp)",
+      "api": "openai-completions",
+      "apiKey": "no-key-required",
+      "baseUrl": "http://127.0.0.1:8080/v1",
+      "models": [
+        {
+          "id": "Qwen3.8-27B-Q4_K_M",
+          "name": "Qwen3.8 27B",
+          "contextWindow": 32768,
+          "maxTokens": 8192,
+          "tools": true
+        },
+        {
+          "id": "gemma-4-26B-A4B-it-UD-Q4_K_M",
+          "name": "Gemma 4 26B-A4B",
+          "contextWindow": 32768,
+          "maxTokens": 8192,
+          "tools": true
+        },
+        {
+          "id": "GLM-4.7-Flash-Q4_K_M",
+          "name": "GLM 4.7 Flash",
+          "contextWindow": 32768,
+          "maxTokens": 8192,
+          "tools": true
+        },
+        {
+          "id": "LFM2.5-230M-Q4_K_M",
+          "name": "LFM 2.5 230M",
+          "contextWindow": 32768,
+          "maxTokens": 8192,
+          "tools": true
+        },
+        {
+          "id": "LFM2.5-1.2B-Instruct-Q4_K_M",
+          "name": "LFM 2.5 1.2B Instruct",
+          "contextWindow": 32768,
+          "maxTokens": 8192,
+          "tools": true
+        }
+      ]
+    },
+    "moonshot": {
+      "name": "Moonshot AI (Kimi)",
+      "api": "openai-completions",
+      "apiKey": "MOONSHOT_API_KEY",
+      "baseUrl": "https://api.moonshot.ai/v1",
+      "models": [
+        {
+          "id": "kimi-k3",
+          "name": "Kimi K3",
+          "contextWindow": 1048576,
+          "maxTokens": 16384,
+          "tools": true
+        },
+        {
+          "id": "kimi-k2.6",
+          "name": "Kimi K2.6",
+          "contextWindow": 262144,
+          "maxTokens": 8192,
+          "tools": true
+        },
+        {
+          "id": "kimi-k2.7-code",
+          "name": "Kimi K2.7 Code",
+          "contextWindow": 262144,
+          "maxTokens": 8192,
+          "tools": true
+        },
+        {
+          "id": "kimi-k2.7-code-highspeed",
+          "name": "Kimi K2.7 Code Highspeed",
+          "contextWindow": 262144,
+          "maxTokens": 8192,
+          "tools": true
+        }
+      ]
+    }
+  }
+}

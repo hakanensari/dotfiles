@@ -285,6 +285,12 @@ if [ "$(uname -s)" = "Darwin" ]; then
     echo "  [link] Linked pi/APPEND_SYSTEM.md -> ~/.pi/agent/APPEND_SYSTEM.md"
   fi
 
+  if [ -f "$DOTFILES_ROOT/pi/models.json" ] && [ ! -h "$HOME/.pi/agent/models.json" ]; then
+    [ -f "$HOME/.pi/agent/models.json" ] && mv "$HOME/.pi/agent/models.json" "$HOME/.pi/agent/models.json.backup"
+    ln -s "$DOTFILES_ROOT/pi/models.json" "$HOME/.pi/agent/models.json"
+    echo "  [link] Linked pi/models.json -> ~/.pi/agent/models.json"
+  fi
+
   # Seed ~/.pi/agent/settings.json and mcp.json if missing
   if [ -f "$DOTFILES_ROOT/pi/settings.json" ] && [ ! -f "$HOME/.pi/agent/settings.json" ]; then
     cp "$DOTFILES_ROOT/pi/settings.json" "$HOME/.pi/agent/settings.json"
@@ -295,6 +301,14 @@ if [ "$(uname -s)" = "Darwin" ]; then
     cp "$DOTFILES_ROOT/pi/mcp.json" "$HOME/.pi/agent/mcp.json"
     echo "  [seed] Seeded pi/mcp.json -> ~/.pi/agent/mcp.json"
   fi
+fi
+
+# Symlink llama-server LaunchAgent
+mkdir -p "$HOME/models" "$HOME/.cache/llama.cpp" "$HOME/Library/LaunchAgents"
+if [ -f "$DOTFILES_ROOT/llama/ht.lineoflight.llama-server.plist" ] && [ ! -h "$HOME/Library/LaunchAgents/ht.lineoflight.llama-server.plist" ]; then
+  [ -f "$HOME/Library/LaunchAgents/ht.lineoflight.llama-server.plist" ] && mv "$HOME/Library/LaunchAgents/ht.lineoflight.llama-server.plist" "$HOME/Library/LaunchAgents/ht.lineoflight.llama-server.plist.backup"
+  ln -s "$DOTFILES_ROOT/llama/ht.lineoflight.llama-server.plist" "$HOME/Library/LaunchAgents/ht.lineoflight.llama-server.plist"
+  echo "  [link] Linked llama/ht.lineoflight.llama-server.plist -> ~/Library/LaunchAgents/ht.lineoflight.llama-server.plist"
 fi
 
 # Symlink scripts from dotfiles/bin into ~/.local/bin

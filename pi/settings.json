@@ -5,5 +5,8 @@
   "theme": "light/dark",
   "defaultThinkingLevel": "low",
   "quietStartup": true,
-  "defaultProjectTrust": "ask"
+  "defaultProjectTrust": "ask",
+  "packages": [
+    "git:github.com/obra/superpowers"
+  ]
 }

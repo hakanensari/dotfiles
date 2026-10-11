@@ -128,7 +128,6 @@ if command -v npx >/dev/null 2>&1; then
   npx skills add mattpocock/skills --skill grill-me handoff wait-what -g -y 2>/dev/null || true
   npx skills add jakubkrehel/skills --skill better-colors better-typography better-ui -g -y 2>/dev/null || true
   npx skills add ogulcancelik/agent-skills --skill web-search --agent pi -g -y 2>/dev/null || true
-  npx skills add obra/superpowers --skill '*' -g -y 2>/dev/null || true
   npx skills add herdrdev/herdr --skill herdr -g -y 2>/dev/null || true
   npx skills add tailscale/tailscale-skill --skill tailscale -g -y 2>/dev/null || true
 fi
@@ -371,6 +370,29 @@ if [ "$(uname -s)" = "Darwin" ]; then
     echo "Installing Grok..."
     curl -fsSL https://x.ai/cli/install.sh | bash
   fi
+fi
+
+# Ensure Superpowers across supported agents
+if command -v claude >/dev/null 2>&1; then
+  claude plugin marketplace list 2>/dev/null | grep -q "superpowers-marketplace" || \
+    claude plugin marketplace add obra/superpowers-marketplace >/dev/null 2>&1 || true
+  claude plugin list 2>/dev/null | grep -q "superpowers@superpowers-marketplace" || \
+    claude plugin install superpowers@superpowers-marketplace >/dev/null 2>&1 || true
+fi
+
+if command -v agy >/dev/null 2>&1; then
+  agy plugin list 2>/dev/null | grep -q '"name": "superpowers"' || \
+    agy plugin install https://github.com/obra/superpowers >/dev/null 2>&1 || true
+fi
+
+if command -v codex >/dev/null 2>&1; then
+  codex plugin marketplace list 2>/dev/null | grep -q "superpowers-marketplace" || \
+    codex plugin marketplace add obra/superpowers-marketplace >/dev/null 2>&1 || true
+fi
+
+if command -v pi >/dev/null 2>&1; then
+  pi list 2>/dev/null | grep -q "superpowers" || \
+    pi install git:github.com/obra/superpowers >/dev/null 2>&1 || true
 fi
 
 # Ensure Herdr agent integrations

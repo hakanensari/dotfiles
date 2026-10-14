@@ -50,11 +50,8 @@ if git -C "$current_dir" rev-parse --git-dir > /dev/null 2>&1; then
     git_info=" on ${purple}${branch_glyph} ${branch}${reset}${dirty}"
 fi
 
-# Model and effort, spelled out, surfaced independently and only when below the
-# Opus + xhigh coding baseline (xhigh is Claude Code's default effort). Decoupled:
-# a cheaper model shows just the model, lower effort shows just the effort, both
-# show both. Rendered after the context bar (see usage_display).
-# Hide at/above baseline: model >= opus (opus/fable/mythos); effort >= xhigh (xhigh/max).
+# Model is always shown; effort surfaces only when below the model's top baseline
+# (xhigh/max on Claude, high on Gemini). Rendered after the context bar.
 # Extract tier (e.g. flash, pro, argon, sonnet, haiku, opus, fable, mythos)
 model_full=$(echo "$model_name" | grep -oEi 'flash|pro|argon|sonnet|haiku|opus|fable|mythos' | tr '[:upper:]' '[:lower:]' | head -n 1)
 
@@ -64,8 +61,8 @@ if [ -z "$model_full" ]; then
 fi
 effort=$(echo "$input" | jq -r '.effort.level // .model.effort // empty')  # low | medium | high | xhigh | max
 
-model_seg="  $model_full"
-case "$effort" in xhigh|max|"") effort_seg="" ;; *) effort_seg="  $effort" ;; esac
+model_seg="${model_full:+  $model_full}"
+case "$model_full:$effort" in *:xhigh|*:max|flash:high|pro:high|argon:high|*:"") effort_seg="" ;; *) effort_seg="  $effort" ;; esac
 
 # Format a labeled percentage with color thresholds (defaults: green <50, yellow <75, red >=75).
 # 5th arg hides the indicator entirely below that value (default 0 = always show).

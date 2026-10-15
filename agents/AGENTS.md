@@ -13,6 +13,7 @@
 - No emojis unless requested.
 - No em dashes in running prose. Bold sparingly (no bold lead-ins on bullets).
 - When linking a local file in chat, write out the full file URL: `[label](file:///path)`.
+- When drafting a message for me to send, write it as plain text in the reply: no blockquote, code fence or indentation, so it copy-pastes clean.
 - Banned phrases:
   - "This isn't X. This is Y."
   - load-bearing, seams, unlock
